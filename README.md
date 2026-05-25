@@ -116,10 +116,29 @@ Client → GET request
 
 Server → Returns HTML page
 
+`server`
+
+<img width="730" height="92" alt="image" src="https://github.com/user-attachments/assets/151776ae-9bdd-4722-87ec-d01b39bfdab7" />
+
+`client`
+
+<img width="740" height="412" alt="image" src="https://github.com/user-attachments/assets/cdf352b1-e490-452c-ad01-295fe091e423" />
+
+
 ### Upload
 Client → POST request
 
 Server → Saves uploaded text into upload.txt
+
+`server`
+
+<img width="749" height="103" alt="image" src="https://github.com/user-attachments/assets/42ce3726-7be7-4259-b209-e464c8eb4f7c" />
+
+
+`client`
+
+<img width="789" height="180" alt="image" src="https://github.com/user-attachments/assets/adf79707-7e2a-4beb-bfa8-519fe882f88d" />
+
 
 ---
 
