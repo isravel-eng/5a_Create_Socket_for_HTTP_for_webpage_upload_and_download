@@ -4,23 +4,101 @@
 To write a Python program for socket communication using HTTP protocol for webpage upload and download.
 
 ## ALGORITHM
-1. Start server.
+1. Start the server.
 2. Create socket using Python socket module.
 3. Bind server to localhost and port 5050.
-4. Accept client requests.
-5. Client sends GET request to download webpage.
-6. Client sends POST request to upload data.
-7. Server processes request and returns response.
-8. Display output.
-9. Stop program.
+4. Listen for incoming requests.
+5. Create client socket.
+6. Send GET request for webpage download.
+7. Send POST request for webpage upload.
+8. Process request and send response.
+9. Display result.
+10. Stop program.
 
 ---
 
-## FILES
-- server.py
-- client.py
-- index.html
-- upload.txt (generated)
+## SERVER PROGRAM (server.py)
+
+```python
+import socket
+
+server=socket.socket()
+server.bind(('localhost',5050))
+server.listen(5)
+
+print('Server running on port 5050...')
+
+while True:
+ client,address=server.accept()
+ request=client.recv(4096).decode()
+
+ if 'GET' in request:
+  try:
+   with open('index.html','r') as f:
+    content=f.read()
+
+   response='HTTP/1.1 200 OK\r\nContent-Type:text/html\r\n\r\n'+content
+  except:
+   response='HTTP/1.1 404 Not Found\r\n\r\nFile not found'
+
+ elif 'POST' in request:
+  body=request.split('\r\n\r\n',1)[1]
+
+  with open('upload.txt','w') as f:
+   f.write(body)
+
+  response='HTTP/1.1 200 OK\r\n\r\nFile Uploaded Successfully'
+
+ else:
+  response='HTTP/1.1 400 Bad Request'
+
+ client.send(response.encode())
+ client.close()
+```
+
+---
+
+## CLIENT PROGRAM (client.py)
+
+```python
+import socket
+
+client=socket.socket()
+client.connect(('localhost',5050))
+
+print('1.Download Webpage')
+print('2.Upload Content')
+
+choice=input('Enter your choice: ')
+
+if choice=='1':
+ request='GET / HTTP/1.1\r\nHost: localhost\r\n\r\n'
+
+else:
+ data=input('Enter text to upload: ')
+ request=('POST / HTTP/1.1\r\nHost: localhost\r\nContent-Type:text/plain\r\n\r\n'+data)
+
+client.send(request.encode())
+print(client.recv(4096).decode())
+client.close()
+```
+
+---
+
+## HTML WEBPAGE (index.html)
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Socket HTTP Demo</title>
+</head>
+<body>
+<h1>HTTP Webpage Upload and Download</h1>
+<p>This webpage is served using Python socket programming.</p>
+</body>
+</html>
+```
 
 ---
 
@@ -31,13 +109,19 @@ python server.py
 python client.py
 ```
 
-## DOWNLOAD OPERATION
-- Client sends HTTP GET request.
-- Server returns webpage content.
+## OUTPUT
 
-## UPLOAD OPERATION
-- Client sends HTTP POST request.
-- Server stores uploaded data in upload.txt.
+### Download
+Client → GET request
+
+Server → Returns HTML page
+
+### Upload
+Client → POST request
+
+Server → Saves uploaded text into upload.txt
+
+---
 
 ## RESULT
 Thus the Python program for socket communication using HTTP protocol for webpage upload and download was executed successfully.
